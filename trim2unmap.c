@@ -88,7 +88,7 @@ static int loopback_write(const void *buf, uint32_t len, uint64_t offset, void *
 		ssize_t bytes_written = write(fd, buf, len);
 		assert(bytes_written > 0);
 		len -= bytes_written;
-		buf = (char *) buf + bytes_written;
+		buf = (uint8_t *) buf + bytes_written;
 	}
 
 	return 0;
@@ -131,10 +131,24 @@ static int loopback_trim(uint64_t from, uint32_t len, void *userdata) {
 	return 0;
 }
 
+static int loopback_flush(void *userdata) {
+	fprintf(stderr, "%s: Debug: Flush: Begin\n", AppName);
+
+	if (ioctl(fd, BLKFLSBUF, 0) < 0) {
+		fprintf(stderr, "%s: Flush: Error: BLKFLSBUF ioctl failed: %s\n", AppName, strerror(errno));
+		abort();
+	}
+
+	fprintf(stderr, "%s: Debug: Flush: Done\n", AppName);
+
+	return 0;
+}
+
 static struct buse_operations bop = {
 	.read = loopback_read,
 	.write = loopback_write,
-	.trim = loopback_trim
+	.trim = loopback_trim,
+	.flush = loopback_flush
 };
 
 int main(int argc, char **argv) {
