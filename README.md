@@ -18,6 +18,14 @@ Nearly all my projects use CMake. It's very simple:
 
 ## How to use
 
+Load the `nbd` kernel module first.
+
+```
+modprobe nbd
+```
+
+Syntax:
+
 ```
 trim2unmap <physical device> <virtual device>
 ```
@@ -25,14 +33,18 @@ trim2unmap <physical device> <virtual device>
 e.g.
 
 ```
-trim2unmap /dev/sdd /dev/nbd/nbd10
+trim2unmap /dev/sdd /dev/nbd10
 ```
 
 Then you can mount your virtual device like mounting the physical device as usual
 
 ```
-mount /dev/nbd/nbd10 /mnt
+mount /dev/nbd10 /mnt
 ```
 
-## Caveats
-- You need to load the `nbd` kernel module first.
+## Screenshots
+![](https://raw.githubusercontent.com/ReimuNotMoe/ReimuNotMoe.github.io/master/images/trim2unmap/Screenshot_20190203_203012.png)
+
+![](https://raw.githubusercontent.com/ReimuNotMoe/ReimuNotMoe.github.io/master/images/trim2unmap/Screenshot_20190203_203317.png)
+
+![](https://raw.githubusercontent.com/ReimuNotMoe/ReimuNotMoe.github.io/master/images/trim2unmap/Screenshot_20190203_203351.png)
